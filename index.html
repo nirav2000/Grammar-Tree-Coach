@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grammar Tree Coach</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">🌳 Grammar learning for ages 9–12</p>
+      <h1>Grammar Tree Coach</h1>
+      <p class="tagline">Grammar is like a tree. Small parts join together to make bigger parts.</p>
+    </div>
+    <div class="header-tools">
+      <label class="switch"><input id="teacherToggle" type="checkbox"><span>Parent/Teacher Notes</span></label>
+      <label for="versionSelect">Version</label>
+      <select id="versionSelect" aria-label="Switch app version"></select>
+      <span id="versionBadge" class="badge"></span>
+    </div>
+  </header>
+
+  <nav class="main-nav" aria-label="Main app sections">
+    <button data-section="home">🏠 Home</button>
+    <button data-section="map">🗺️ Grammar Map</button>
+    <button data-section="path">🧭 Learning Path</button>
+    <button data-section="analyser">🔎 Sentence Analyser</button>
+    <button data-section="practice">🎯 Practice Studio</button>
+    <button data-section="glossary">📚 Glossary</button>
+    <button data-section="progress">⭐ Progress</button>
+  </nav>
+
+  <main>
+    <section id="home" class="panel active">
+      <div class="hero card">
+        <h2>Grow your grammar tree</h2>
+        <p>Start with letters and words, then climb to phrases, clauses, sentences, paragraphs, and whole texts.</p>
+        <div id="principles" class="principles"></div>
+        <div class="button-grid">
+          <button data-section="path">Start Learning</button>
+          <button data-section="map">Grammar Map</button>
+          <button data-section="analyser">Sentence Analyser</button>
+          <button data-section="practice">Practice Studio</button>
+          <button data-section="glossary">Glossary</button>
+          <button data-section="progress">Progress</button>
+        </div>
+      </div>
+      <div class="card version-card">
+        <h3>Global Version History</h3>
+        <p>This app reads the shared <code>VERSION_HISTORY.md</code> file so current and archived versions point to one history.</p>
+        <pre id="versionHistoryPreview">Loading version history…</pre>
+      </div>
+    </section>
+
+    <section id="map" class="panel">
+      <div class="section-heading"><h2>Grammar Map</h2><p>Open a branch, choose a topic, and read its learning card.</p></div>
+      <div class="split">
+        <div id="treeRoot" class="tree card"></div>
+        <article id="learningCard" class="card learning-card" aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section id="path" class="panel">
+      <div class="section-heading"><h2>Learning Path</h2><p>Eight levels guide you from words to mixed mastery.</p></div>
+      <div id="levels" class="level-list"></div>
+    </section>
+
+    <section id="analyser" class="panel">
+      <div class="section-heading"><h2>Sentence Analyser</h2><p>Tap words to see their word class and job.</p></div>
+      <div class="card controls"><label for="sentenceSelect">Choose a sentence</label><select id="sentenceSelect"></select></div>
+      <div id="wordButtons" class="word-row card"></div>
+      <div id="phrasePanel" class="card"></div>
+      <div id="analysisPanel" class="card feedback">Choose a word to begin.</div>
+    </section>
+
+    <section id="practice" class="panel">
+      <div class="section-heading"><h2>Practice Studio</h2><p>Try quick activities with instant feedback.</p></div>
+      <div class="practice-grid">
+        <div class="card" id="tapActivity"></div>
+        <div class="card" id="nounPhraseActivity"></div>
+        <div class="card" id="expandActivity"></div>
+        <div class="card" id="fixActivity"></div>
+        <div class="card" id="zoomActivity"></div>
+      </div>
+    </section>
+
+    <section id="glossary" class="panel">
+      <div class="section-heading"><h2>Glossary</h2><p>Search grammar terms and examples.</p></div>
+      <input id="glossarySearch" class="search" placeholder="Search terms such as noun, clause, comma…" aria-label="Search glossary">
+      <div id="glossaryList" class="glossary-list"></div>
+    </section>
+
+    <section id="progress" class="panel">
+      <div class="section-heading"><h2>Progress Dashboard</h2><p>Your progress is saved in this browser with localStorage.</p></div>
+      <div id="progressCards" class="progress-grid"></div>
+      <button id="resetProgress" class="danger">Reset local progress</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Grammar Tree Coach <span id="footerVersion"></span> • No backend • Progress stored locally</p>
+  </footer>
+
+  <script src="grammar-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
