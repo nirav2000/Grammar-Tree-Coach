@@ -70,7 +70,7 @@ function initVersionTools() {
     }
     window.location.href = selected.path;
   });
-  fetch("VERSION_HISTORY.md").then(response => response.text()).then(text => { $("#versionHistoryPreview").textContent = text; }).catch(() => { $("#versionHistoryPreview").textContent = "VERSION_HISTORY.md could not be loaded in this browser context."; });
+  fetch("../VERSION_HISTORY.md").then(response => response.text()).then(text => { $("#versionHistoryPreview").textContent = text; }).catch(() => { $("#versionHistoryPreview").textContent = "VERSION_HISTORY.md could not be loaded in this browser context."; });
 }
 
 function renderPrinciples() {
