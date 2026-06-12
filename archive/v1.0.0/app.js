@@ -18,20 +18,6 @@ function saveProgress(activity = "Learning") {
 }
 function normalise(text) { return String(text).trim().toLowerCase(); }
 function escapeHtml(text) { return String(text).replace(/[&<>"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char])); }
-function escapeRegExp(text) { return String(text).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
-function highlightText(text, highlights = []) {
-  let output = escapeHtml(text);
-  highlights.filter(Boolean).sort((a, b) => b.length - a.length).forEach(term => {
-    const escapedTerm = escapeRegExp(escapeHtml(term));
-    const pattern = /\w/.test(term) ? `\\b(${escapedTerm})\\b` : `(${escapedTerm})`;
-    output = output.replace(new RegExp(pattern, "gi"), '<mark>$1</mark>');
-  });
-  return output;
-}
-function exampleMarkup(example) {
-  if (typeof example === "string") return escapeHtml(example);
-  return `${highlightText(example.sentence, example.highlights || [])}<span class="example-note">${escapeHtml(example.note || "")}</span>`;
-}
 
 function showSection(id) {
   $$(".panel").forEach(panel => panel.classList.toggle("active", panel.id === id));
@@ -41,14 +27,6 @@ function showSection(id) {
 
 function initNavigation() {
   $$("[data-section]").forEach(button => button.addEventListener("click", () => showSection(button.dataset.section)));
-  const printButton = $("#printTree");
-  if (printButton) printButton.addEventListener("click", () => {
-    const closedBranches = $$("#treeRoot details:not([open])");
-    closedBranches.forEach(branch => branch.open = true);
-    saveProgress("Printed grammar tree");
-    window.print();
-    closedBranches.forEach(branch => branch.open = false);
-  });
   $("#teacherToggle").addEventListener("change", event => {
     teacherMode = event.target.checked;
     document.body.classList.toggle("teacher-on", teacherMode);
@@ -70,7 +48,7 @@ function initVersionTools() {
     }
     window.location.href = selected.path;
   });
-  fetch("VERSION_HISTORY.md").then(response => response.text()).then(text => { $("#versionHistoryPreview").textContent = text; }).catch(() => { $("#versionHistoryPreview").textContent = "VERSION_HISTORY.md could not be loaded in this browser context."; });
+  fetch("../../VERSION_HISTORY.md").then(response => response.text()).then(text => { $("#versionHistoryPreview").textContent = text; }).catch(() => { $("#versionHistoryPreview").textContent = "VERSION_HISTORY.md could not be loaded in this browser context."; });
 }
 
 function renderPrinciples() {
@@ -95,7 +73,7 @@ function showLearningCard(title) {
   $("#learningCard").innerHTML = `<h2>${escapeHtml(title)}</h2><dl>
     <dt>Simple meaning</dt><dd>${detail.meaning}</dd>
     <dt>Deeper explanation</dt><dd>${detail.deeper}</dd>
-    <dt>Example sentence</dt><dd><strong>${highlightText(detail.example, detail.highlights)}</strong></dd>
+    <dt>Example</dt><dd><strong>${detail.example}</strong></dd>
     <dt>How to spot it</dt><dd>${detail.spot}</dd>
     <dt>Common mistake</dt><dd>${detail.mistake}</dd>
   </dl><div class="teacher-note"><strong>Teaching tip:</strong> Ask: “What job is this doing in the sentence?” For ${escapeHtml(title)}, ask the child to prove the label using nearby words.</div>
@@ -110,7 +88,7 @@ function showLearningCard(title) {
 }
 
 function renderLevels() {
-  $("#levels").innerHTML = LEARNING_LEVELS.map(level => `<article class="card level"><h3>${level.title}</h3><p>${level.explanation}</p><strong>Example sentences</strong><ul>${level.examples.map(ex => `<li>${exampleMarkup(ex)}</li>`).join("")}</ul><div>${level.quiz.map(q => `<div class="quiz-row"><label for="level-${level.id}-${q.id}">${q.question}</label><input id="level-${level.id}-${q.id}" data-answer="${escapeHtml(q.answer)}"></div>`).join("")}</div><button data-check-level="${level.id}">Check Level ${level.id}</button><p id="level-score-${level.id}" class="score"></p><div class="teacher-note"><strong>Teaching tip:</strong> Ask pupils to explain how this level connects to the one above and below it in the grammar tree.</div></article>`).join("");
+  $("#levels").innerHTML = LEARNING_LEVELS.map(level => `<article class="card level"><h3>${level.title}</h3><p>${level.explanation}</p><strong>Examples</strong><ul>${level.examples.map(ex => `<li>${ex}</li>`).join("")}</ul><div>${level.quiz.map(q => `<div class="quiz-row"><label for="level-${level.id}-${q.id}">${q.question}</label><input id="level-${level.id}-${q.id}" data-answer="${escapeHtml(q.answer)}"></div>`).join("")}</div><button data-check-level="${level.id}">Check Level ${level.id}</button><p id="level-score-${level.id}" class="score"></p><div class="teacher-note"><strong>Teaching tip:</strong> Ask pupils to explain how this level connects to the one above and below it in the grammar tree.</div></article>`).join("");
   $$('[data-check-level]').forEach(button => button.addEventListener("click", () => checkLevel(Number(button.dataset.checkLevel))));
 }
 function checkLevel(levelId) {
@@ -132,15 +110,12 @@ function renderAnalyser() {
 function showSentence(index) {
   const sentence = ANALYSER_SENTENCES[index];
   $("#wordButtons").innerHTML = sentence.words.map((word, i) => `<button data-word-index="${i}" data-class="${word[1]}">${word[0]}</button>`).join("");
-  $("#phrasePanel").innerHTML = `<h3>Phrase and clause groups</h3><ul>${sentence.phrases.map(p => typeof p === "string" ? `<li>${escapeHtml(p)}</li>` : `<li><strong>${escapeHtml(p.label)}:</strong> ${highlightText(p.text, p.highlights || [])}<br><span>${escapeHtml(p.job)}</span></li>`).join("")}</ul>`;
+  $("#phrasePanel").innerHTML = `<h3>Phrase and clause groups</h3><ul>${sentence.phrases.map(p => `<li>${p}</li>`).join("")}</ul>`;
   $("#analysisPanel").textContent = "Choose a word to begin.";
-  const summary = sentence.summary ? `<p class="analysis-summary"><strong>Sentence pattern:</strong> ${sentence.summary}</p>` : "";
-  $("#analysisPanel").innerHTML = `${summary}<p>Choose a word to begin.</p>`;
   $$("#wordButtons button").forEach(button => button.addEventListener("click", () => {
     const word = sentence.words[Number(button.dataset.wordIndex)];
-    const [text, wordClass, reason, job = "", clue = ""] = word;
-    $("#analysisPanel").innerHTML = `${summary}<p><strong>${escapeHtml(text)}</strong> is a <strong>${escapeHtml(wordClass)}</strong> because it ${escapeHtml(reason)}</p>${job ? `<p><strong>Job in this sentence:</strong> ${escapeHtml(job)}</p>` : ""}${clue ? `<p><strong>Spotting clue:</strong> ${escapeHtml(clue)}</p>` : ""}<div class="teacher-note"><strong>Suggested prompt:</strong> “What clue helped you decide that ${escapeHtml(text)} is a ${escapeHtml(wordClass)}?”</div>`;
-    saveProgress(`Analysed ${text}`);
+    $("#analysisPanel").innerHTML = `<strong>${word[0]}</strong> is a <strong>${word[1]}</strong> because it ${word[2]}<div class="teacher-note"><strong>Suggested prompt:</strong> “What clue helped you decide that ${word[0]} is a ${word[1]}?”</div>`;
+    saveProgress(`Analysed ${word[0]}`);
   }));
 }
 
@@ -180,7 +155,7 @@ function renderGlossary() {
   const draw = () => {
     const query = normalise($("#glossarySearch").value);
     const items = GLOSSARY.filter(g => !query || [g.term, g.child, g.formal, g.example].some(v => normalise(v).includes(query)));
-    $("#glossaryList").innerHTML = items.map(g => `<article class="card term"><h3>${g.term}</h3><p><strong>Child-friendly:</strong> ${g.child}</p><p><strong>Formal:</strong> ${g.formal}</p><p><strong>Example sentence:</strong> ${g.example}</p><p><strong>Common mistake:</strong> ${g.mistake}</p><div class="teacher-note"><strong>Suggested prompt:</strong> “Can you make your own sentence using ${g.term}?”</div></article>`).join("");
+    $("#glossaryList").innerHTML = items.map(g => `<article class="card term"><h3>${g.term}</h3><p><strong>Child-friendly:</strong> ${g.child}</p><p><strong>Formal:</strong> ${g.formal}</p><p><strong>Example:</strong> ${g.example}</p><p><strong>Common mistake:</strong> ${g.mistake}</p><div class="teacher-note"><strong>Suggested prompt:</strong> “Can you make your own sentence using ${g.term}?”</div></article>`).join("");
   };
   $("#glossarySearch").addEventListener("input", draw); draw();
 }

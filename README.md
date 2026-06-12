@@ -60,20 +60,21 @@ You can also open `index.html` directly in a browser, although the version histo
 
 ## Version history
 
-The initial complete app version is **v1.0.0**. See [`VERSION_HISTORY.md`](VERSION_HISTORY.md) for the global history shared by current and archived app versions.
+The current app version is **v1.1.0**. See [`VERSION_HISTORY.md`](VERSION_HISTORY.md) for the global history shared by current and archived app versions.
 
 When releasing a new version:
 
 1. Follow semantic versioning: `MAJOR.MINOR.PATCH`.
 2. Move or copy the previous release into `archive/<version>/`.
 3. Update `APP_VERSION` and `VERSION_REGISTRY` in `grammar-data.js`.
-4. Update `VERSION_HISTORY.md` with release notes and archive notes.
-5. Commit and push the release.
+4. Update visible examples so each one is a complete example sentence with the key grammar word(s) highlighted.
+5. Update `VERSION_HISTORY.md` with release notes and archive notes.
+6. Commit and push the release.
 
 ## Future improvements
 
-- Printable worksheets for classrooms.
-- More sentence analyser passages and paragraph-level analysis.
+- Printable worksheets for classrooms beyond the printable grammar tree.
+- More paragraph-level sentence analyser passages.
 - Teacher-created custom quizzes stored locally in the browser.
 - More accessibility preferences such as dyslexia-friendly font mode.
 - Export/import progress as a local JSON file.

@@ -75,22 +75,3 @@ select, input { border: 2px solid #b9dcd2; border-radius: 14px; padding: 0.75rem
 .score { font-weight: 800; color: var(--primary-dark); }
 footer { text-align: center; color: var(--muted); padding: 2rem 1rem; }
 @media (max-width: 780px) { .app-header, .split { grid-template-columns: 1fr; display: grid; } .app-header { align-items: start; } body { font-size: 16px; } .card { border-radius: 18px; } }
-mark { background: #ffe58a; color: #173b33; border-radius: 0.35rem; padding: 0 0.18rem; box-shadow: inset 0 -0.15rem 0 #ffc94d; }
-.example-note { display: block; color: var(--muted); font-size: 0.95rem; margin-top: 0.25rem; }
-.analysis-summary { background: #eef8f5; border-radius: 14px; padding: 0.75rem; }
-#phrasePanel li { margin-bottom: 0.75rem; }
-#phrasePanel span, .print-hint { color: var(--muted); }
-.section-heading button { margin-top: 0.35rem; }
-@media print {
-  body { background: #fff; color: #000; font-size: 12pt; }
-  .app-header, .main-nav, #home, #path, #analyser, #practice, #glossary, #progress, footer, #learningCard, .section-heading p, .section-heading button { display: none !important; }
-  main { padding: 0; }
-  #map, #map.panel { display: block !important; }
-  .split { display: block; }
-  .printable-tree { box-shadow: none; border: 0; padding: 0; }
-  .printable-tree::before { content: "Grammar Tree Coach Printable Grammar Tree — v1.1.0"; display: block; font-size: 18pt; font-weight: 800; margin-bottom: 1rem; }
-  .tree ul { border-left: 1px solid #777; }
-  .tree .leaf { background: #fff; color: #000; border: 1px solid #999; box-shadow: none; }
-  details { display: block; }
-  details > * { display: block; }
-}
