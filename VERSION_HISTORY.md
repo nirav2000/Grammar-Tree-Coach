@@ -2,7 +2,29 @@
 
 This is the global version history for Grammar Tree Coach. Current and archived static app versions link back to this single file so releases share one source of truth.
 
-## v1.1.0 — 2026-06-12 — Current
+## v2.0.0 — 2026-06-12 — Current
+
+Semantic version: `MAJOR.MINOR.PATCH`
+
+### Added
+- Strict learning-card schema with ids, category, meanings, examples, non-examples, spotting guidance, mistakes, mini quizzes, teacher prompts, age level, and status.
+- Content quality validation at startup for missing fields, missing cards, cards needing review, and banned placeholder phrases.
+- Parent/Teacher Mode content quality report showing total cards, complete cards, missing cards, cards needing review, and banned placeholder phrase findings.
+- Complete topic-specific learning cards for all Grammar Map topics, plus a dedicated Sentence card.
+
+### Changed
+- Replaced generic fallback learning-card content with explicit missing-card warnings when a card is absent.
+- Replaced the Gender card with a modern-English explanation of natural gender, pronoun choice, and the difference from grammatical gender in other languages.
+- Improved glossary schema and glossary entries so each entry uses childMeaning, formalMeaning, example, and commonMistake.
+- Version selector now marks v2.0.0 as current, keeps v1.1.0 as an archived release, and moves classroom packs to planned v2.1.0.
+
+### Removed
+- Removed poor fallback wording such as generic grammar-tree placeholder text from current and archived data files.
+
+### Archived previous version
+- `archive/v1.1.0/` preserves the examples/analyser/printable-tree release before the v2.0.0 content-quality release.
+
+## v1.1.0 — 2026-06-12 — Archived
 
 Semantic version: `MAJOR.MINOR.PATCH`
 
@@ -14,8 +36,8 @@ Semantic version: `MAJOR.MINOR.PATCH`
 - Printable Grammar Tree button and print stylesheet for classroom handouts.
 
 ### Changed
-- Version selector now marks v1.1.0 as current, keeps v1.0.0 as an archived release, and moves classroom packs to planned v1.2.0.
-- Learning Path examples now use complete example sentences rather than isolated fragments.
+- Version selector marked v1.1.0 as current, kept v1.0.0 as an archived release, and moved classroom packs to planned v1.2.0.
+- Learning Path examples used complete example sentences rather than isolated fragments.
 
 ### Archived previous version
 - `archive/v1.0.0/` preserves the first complete static app release before the v1.1.0 improvements.
@@ -40,7 +62,7 @@ Semantic version: `MAJOR.MINOR.PATCH`
 - Starter repository contained only a minimal README and no runnable Grammar Tree Coach app.
 - Preserved as the previous version before the first full educational release.
 
-## v1.2.0 — Future
+## v2.1.0 — Future
 
 ### Planned
 - Printable classroom worksheets beyond the grammar tree.

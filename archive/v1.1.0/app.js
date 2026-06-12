@@ -70,7 +70,7 @@ function initVersionTools() {
     }
     window.location.href = selected.path;
   });
-  fetch("VERSION_HISTORY.md").then(response => response.text()).then(text => { $("#versionHistoryPreview").textContent = text; }).catch(() => { $("#versionHistoryPreview").textContent = "VERSION_HISTORY.md could not be loaded in this browser context."; });
+  fetch("../../VERSION_HISTORY.md").then(response => response.text()).then(text => { $("#versionHistoryPreview").textContent = text; }).catch(() => { $("#versionHistoryPreview").textContent = "VERSION_HISTORY.md could not be loaded in this browser context."; });
 }
 
 function renderPrinciples() {
@@ -79,45 +79,33 @@ function renderPrinciples() {
 
 function renderTreeNode(node) {
   const hasChildren = node.children && node.children.length;
-  if (!hasChildren) return `<li><button class="leaf" data-topic-id="${escapeHtml(node.id)}">${escapeHtml(node.title)}</button></li>`;
-  return `<li><details ${node.title === "GRAMMAR" ? "open" : ""}><summary data-topic-id="${escapeHtml(node.id)}">${escapeHtml(node.title)}</summary><ul>${node.children.map(renderTreeNode).join("")}</ul></details></li>`;
+  if (!hasChildren) return `<li><button class="leaf" data-topic="${escapeHtml(node.title)}">${escapeHtml(node.title)}</button></li>`;
+  return `<li><details ${node.title === "GRAMMAR" ? "open" : ""}><summary data-topic="${escapeHtml(node.title)}">${escapeHtml(node.title)}</summary><ul>${node.children.map(renderTreeNode).join("")}</ul></details></li>`;
 }
 function renderGrammarMap() {
   $("#treeRoot").innerHTML = `<ul>${renderTreeNode(GRAMMAR_TREE)}</ul>`;
   $("#treeRoot").addEventListener("click", event => {
-    const target = event.target.closest("[data-topic-id]");
-    if (target) showLearningCard(target.dataset.topicId);
+    const target = event.target.closest("[data-topic]");
+    if (target) showLearningCard(target.dataset.topic);
   });
-  showLearningCard(getTopicIdForTitle("Nouns"));
+  showLearningCard("Nouns");
 }
-function renderLearningCardWarning(topicId) {
-  $("#learningCard").innerHTML = `<h2>Learning card needed for this topic.</h2><p class="missing-card">Topic id: <code>${escapeHtml(topicId)}</code></p><p>No fallback lesson has been shown, because missing grammar content should be fixed in <code>grammar-data.js</code>.</p>`;
-}
-function renderExampleList(items) {
-  return `<ul>${items.map(item => `<li><strong>${escapeHtml(item.sentence)}</strong><br><span>${escapeHtml(item.explanation)}</span></li>`).join("")}</ul>`;
-}
-function renderTextList(items) { return `<ul>${items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`; }
-function showLearningCard(topicId) {
-  const card = getLearningCard(topicId);
-  if (!card) { renderLearningCardWarning(topicId); return; }
-  const quizName = `topic-${card.id}`;
-  $("#learningCard").innerHTML = `<h2>${escapeHtml(card.title)}</h2><p class="topic-id"><strong>Topic id:</strong> <code>${escapeHtml(card.id)}</code> · <strong>Status:</strong> ${escapeHtml(card.status)}</p>
-    <section><h3>Simple meaning</h3><p>${escapeHtml(card.simpleMeaning)}</p></section>
-    <section><h3>Formal meaning</h3><p>${escapeHtml(card.formalMeaning)}</p></section>
-    <section><h3>Why it matters</h3><p>${escapeHtml(card.whyItMatters)}</p></section>
-    <section><h3>Examples</h3>${renderExampleList(card.examples)}</section>
-    <section><h3>Non-examples</h3>${renderExampleList(card.nonExamples)}</section>
-    <section><h3>How to spot it</h3>${renderTextList(card.howToSpot)}</section>
-    <section><h3>Common mistakes</h3>${renderTextList(card.commonMistakes)}</section>
-    <section class="quiz-row"><h3>Mini quiz</h3><p>${escapeHtml(card.miniQuiz.question)}</p><div class="choice-row">${card.miniQuiz.options.map(option => `<label class="option-pill"><input type="radio" name="${quizName}" value="${escapeHtml(option)}"> ${escapeHtml(option)}</label>`).join("")}</div><button id="topicCheck">Check mini quiz</button><p id="topicFeedback" class="score"></p></section>
-    <div class="teacher-note"><strong>Parent/Teacher prompt:</strong> ${escapeHtml(card.teacherPrompt)}</div>`;
+function showLearningCard(title) {
+  const detail = getTopicDetail(title);
+  $("#learningCard").innerHTML = `<h2>${escapeHtml(title)}</h2><dl>
+    <dt>Simple meaning</dt><dd>${detail.meaning}</dd>
+    <dt>Deeper explanation</dt><dd>${detail.deeper}</dd>
+    <dt>Example sentence</dt><dd><strong>${highlightText(detail.example, detail.highlights)}</strong></dd>
+    <dt>How to spot it</dt><dd>${detail.spot}</dd>
+    <dt>Common mistake</dt><dd>${detail.mistake}</dd>
+  </dl><div class="teacher-note"><strong>Teaching tip:</strong> Ask: “What job is this doing in the sentence?” For ${escapeHtml(title)}, ask the child to prove the label using nearby words.</div>
+  <div class="quiz-row"><label>${detail.quiz}</label><input id="topicAnswer" aria-label="Mini quiz answer"><button id="topicCheck">Check mini quiz</button><p id="topicFeedback" class="score"></p></div>`;
   $("#topicCheck").addEventListener("click", () => {
-    const chosen = $(`input[name="${quizName}"]:checked`);
-    const correct = chosen && normalise(chosen.value) === normalise(card.miniQuiz.answer);
-    $("#topicFeedback").textContent = correct ? `Correct! ${card.miniQuiz.explanation}` : `Try again. ${card.miniQuiz.explanation}`;
-    if (correct && !progress.masteredTopics.includes(card.title)) progress.masteredTopics.push(card.title);
-    if (!correct && !progress.needsPractice.includes(card.title)) progress.needsPractice.push(card.title);
-    saveProgress(`Tried ${card.title} mini quiz`);
+    const correct = normalise($("#topicAnswer").value).includes(normalise(detail.answer));
+    $("#topicFeedback").textContent = correct ? "Correct! You spotted the grammar job." : `Try again. Hint: the answer includes “${detail.answer}”.`;
+    if (correct && !progress.masteredTopics.includes(title)) progress.masteredTopics.push(title);
+    if (!correct && !progress.needsPractice.includes(title)) progress.needsPractice.push(title);
+    saveProgress(`Tried ${title} mini quiz`);
   });
 }
 
@@ -191,18 +179,10 @@ function renderZoomActivity() {
 function renderGlossary() {
   const draw = () => {
     const query = normalise($("#glossarySearch").value);
-    const items = GLOSSARY.filter(g => !query || [g.term, g.childMeaning, g.formalMeaning, g.example, g.commonMistake].some(v => normalise(v).includes(query)));
-    $("#glossaryList").innerHTML = items.map(g => `<article class="card term"><h3>${escapeHtml(g.term)}</h3><p><strong>Child meaning:</strong> ${escapeHtml(g.childMeaning)}</p><p><strong>Formal meaning:</strong> ${escapeHtml(g.formalMeaning)}</p><p><strong>Example:</strong> ${g.example}</p><p><strong>Common mistake:</strong> ${escapeHtml(g.commonMistake)}</p><div class="teacher-note"><strong>Suggested prompt:</strong> “Can you make your own sentence using ${escapeHtml(g.term)}?”</div></article>`).join("");
+    const items = GLOSSARY.filter(g => !query || [g.term, g.child, g.formal, g.example].some(v => normalise(v).includes(query)));
+    $("#glossaryList").innerHTML = items.map(g => `<article class="card term"><h3>${g.term}</h3><p><strong>Child-friendly:</strong> ${g.child}</p><p><strong>Formal:</strong> ${g.formal}</p><p><strong>Example sentence:</strong> ${g.example}</p><p><strong>Common mistake:</strong> ${g.mistake}</p><div class="teacher-note"><strong>Suggested prompt:</strong> “Can you make your own sentence using ${g.term}?”</div></article>`).join("");
   };
   $("#glossarySearch").addEventListener("input", draw); draw();
-}
-
-function renderContentQualityReport() {
-  const report = CONTENT_QUALITY_REPORT;
-  const problemList = (items, label) => items.length ? `<details><summary>${label}: ${items.length}</summary><ul>${items.slice(0, 20).map(item => `<li><code>${escapeHtml(item.id)}</code> ${escapeHtml(item.title || "")} ${item.issues ? `— ${escapeHtml(item.issues.join("; "))}` : ""}</li>`).join("")}</ul></details>` : `<p>${label}: 0</p>`;
-  const el = $("#contentQualityReport");
-  if (!el) return;
-  el.innerHTML = `<h3>Content quality report</h3><p><strong>Total cards:</strong> ${report.totalCards}</p><p><strong>Complete cards:</strong> ${report.completeCards}</p>${problemList(report.cardsNeedingReview, "Cards needing review")}${problemList(report.missingCards, "Missing cards")}${problemList(report.bannedPlaceholderCards, "Cards with banned placeholder phrases")}`;
 }
 
 function renderProgress() {
@@ -214,5 +194,5 @@ function initReset() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initNavigation(); initVersionTools(); renderPrinciples(); renderContentQualityReport(); renderGrammarMap(); renderLevels(); renderAnalyser(); renderPractice(); renderGlossary(); renderProgress(); initReset();
+  initNavigation(); initVersionTools(); renderPrinciples(); renderGrammarMap(); renderLevels(); renderAnalyser(); renderPractice(); renderGlossary(); renderProgress(); initReset();
 });

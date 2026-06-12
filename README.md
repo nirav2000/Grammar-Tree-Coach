@@ -60,21 +60,24 @@ You can also open `index.html` directly in a browser, although the version histo
 
 ## Version history
 
-The current app version is **v1.1.0**. See [`VERSION_HISTORY.md`](VERSION_HISTORY.md) for the global history shared by current and archived app versions.
+The current app version is **v2.0.0**. See [`VERSION_HISTORY.md`](VERSION_HISTORY.md) for the global history shared by current and archived app versions.
 
 When releasing a new version:
 
 1. Follow semantic versioning: `MAJOR.MINOR.PATCH`.
 2. Move or copy the previous release into `archive/<version>/`.
 3. Update `APP_VERSION` and `VERSION_REGISTRY` in `grammar-data.js`.
-4. Update visible examples so each one is a complete example sentence with the key grammar word(s) highlighted.
-5. Update `VERSION_HISTORY.md` with release notes and archive notes.
-6. Commit and push the release.
+4. Archive the previous release under `archive/<version>/` and keep archived links pointing to the shared history.
+5. Validate every Grammar Map topic has a strict-schema learning card; missing cards should show a warning, not fallback teaching copy.
+6. Update visible examples so each one is a complete example sentence with the key grammar word(s) highlighted where relevant.
+7. Update `VERSION_HISTORY.md` with release notes and archive notes.
+8. Commit and push the release.
 
 ## Future improvements
 
 - Printable worksheets for classrooms beyond the printable grammar tree.
 - More paragraph-level sentence analyser passages.
 - Teacher-created custom quizzes stored locally in the browser.
+- Authoring tools for reviewing learning-card quality reports.
 - More accessibility preferences such as dyslexia-friendly font mode.
 - Export/import progress as a local JSON file.

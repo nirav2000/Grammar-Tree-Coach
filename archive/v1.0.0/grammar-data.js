@@ -55,11 +55,11 @@ const TOPIC_DETAILS = {
 function getTopicDetail(title) {
   const key = TOPIC_DETAILS[title] ? title : Object.keys(TOPIC_DETAILS).find(k => title.toLowerCase().includes(k.toLowerCase().replace("clauses", "clause")));
   const base = key ? TOPIC_DETAILS[key] : [
-    `${title} is a grammar idea that helps words do a clear job.`,
-    `This topic fits into the grammar tree. Learn where it sits, then look for its job inside real sentences.`,
+    `${title} needs a dedicated archived learning card.`,
+    `This archived card predates the v2.0.0 strict content schema.`,
     `Example: The small dog barked loudly in the garden.`,
-    `Look at nearby words and ask what job ${title.toLowerCase()} is doing.`,
-    `Do not memorise the label without checking its job in the sentence.`,
+    `Use the current app for the reviewed card for this topic.`,
+    `Archived placeholder text was removed during the v2.0.0 content-quality cleanup.`,
     `What should grammar labels explain?`,
     `jobs`
   ];

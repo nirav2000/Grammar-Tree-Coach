@@ -94,11 +94,3 @@ mark { background: #ffe58a; color: #173b33; border-radius: 0.35rem; padding: 0 0
   details { display: block; }
   details > * { display: block; }
 }
-
-.topic-id, .missing-card { color: var(--muted); }
-.missing-card { background: #fff1f1; border-left: 6px solid var(--danger); padding: 0.8rem; border-radius: 12px; }
-.option-pill { display: inline-flex; gap: 0.35rem; align-items: center; background: #eef8f5; border: 2px solid #bfe5da; border-radius: 999px; padding: 0.45rem 0.75rem; font-weight: 700; }
-.quality-report { margin: 1rem 0; }
-.quality-report details { margin: 0.5rem 0; }
-.learning-card section { border-top: 1px solid #e0eee9; padding-top: 0.75rem; margin-top: 0.75rem; }
-.learning-card li { margin-bottom: 0.55rem; }
