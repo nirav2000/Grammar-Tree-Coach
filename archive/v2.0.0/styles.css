@@ -102,5 +102,3 @@ mark { background: #ffe58a; color: #173b33; border-radius: 0.35rem; padding: 0 0
 .quality-report details { margin: 0.5rem 0; }
 .learning-card section { border-top: 1px solid #e0eee9; padding-top: 0.75rem; margin-top: 0.75rem; }
 .learning-card li { margin-bottom: 0.55rem; }
-.card-status { display: inline-flex; align-items: center; justify-content: center; width: 1.35em; margin-right: 0.2rem; font-size: 0.9em; }
-.card-status.needs-review, .card-status.missing { filter: saturate(1.2); }

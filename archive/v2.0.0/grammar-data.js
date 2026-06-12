@@ -1,13 +1,12 @@
 /* Grammar Tree Coach data store
    Keep learning content separate from app behaviour so teachers can extend it easily. */
-const APP_VERSION = "v2.0.1";
+const APP_VERSION = "v2.0.0";
 
 const VERSION_REGISTRY = [
   { version: "v0.0.0", label: "Archive: repository starter", status: "archived", path: "archive/v0.0.0/" },
   { version: "v1.0.0", label: "Archive: first complete app", status: "archived", path: "archive/v1.0.0/" },
   { version: "v1.1.0", label: "Archive: examples + printable tree", status: "archived", path: "archive/v1.1.0/" },
-  { version: "v2.0.0", label: "Archive: strict schema baseline", status: "archived", path: "archive/v2.0.0/" },
-  { version: "v2.0.1", label: "Current: reviewed learning-card content", status: "current", path: "./" },
+  { version: "v2.0.0", label: "Current: strict learning-card content", status: "current", path: "./" },
   { version: "v2.1.0", label: "Future: classroom packs", status: "future", path: "#future" }
 ];
 
@@ -318,328 +317,85 @@ const TERM_INFO = {
   "greeting": ["A greeting interjection opens contact with someone.", "Words such as hello, hi, and hey can stand apart from the rest of a sentence.", "Hello, Sam, welcome back.", "It helps show social interaction in speech or writing."]
 };
 
-const CARD_PROFILE_LIBRARY = {
-  overview: {
-    example: cardExample("The small dog barked loudly because it heard thunder.", "The sentence can be explored as words, phrases, clauses, punctuation, and meaning working together."),
-    nonExamples: title => [cardExample(`A spelling list alone is not the same as studying ${title}.`, `A list may contain words, but ${title} is about how language parts work together.`), cardExample(`Beautiful handwriting does not prove that ${title} is understood.`, `Grammar understanding comes from explaining meaning and structure, not neatness.`)],
-    howToSpot: ["Ask what size of language you are studying: word, phrase, clause, sentence, paragraph, or whole text.", "Use grammar labels to explain meaning and structure, not just to name things.", "Check how smaller parts combine to make a complete message."],
-    commonMistakes: ["Treating grammar as a list of labels instead of a way to explain writing.", "Skipping the sentence context when deciding a word's job.", "Thinking one grammar label can explain every job in a sentence."],
-    quiz: { question: "What should a grammar label help explain?", options: ["the job a word or group is doing", "the colour of the pen", "how tall the writer is", "the page number only"], answer: "the job a word or group is doing", explanation: "A useful grammar label explains the job a word, phrase, clause, or mark is doing." },
-    prompt: "Ask the child to choose one sentence and explain it at two levels, such as word class and clause."
-  },
-  noun: {
-    example: cardExample("The puppy chased a red ball across the grass.", "Puppy, ball, and grass name things, so they are nouns or noun heads."),
-    nonExamples: title => [cardExample(`The word quickly is not a ${title} in “The puppy ran quickly.”`, "Quickly tells how the puppy ran; it does not name a person, place, thing, animal, or idea."), cardExample(`The word under is not a ${title} in “The ball rolled under the bench.”`, "Under shows a place relationship, so it is a preposition in this sentence.")],
-    howToSpot: ["Ask whether the word names a person, place, animal, thing, or idea.", "Try putting a determiner such as the, a, this, or my before it.", "Check whether the word or phrase can work as a subject, object, or complement."],
-    commonMistakes: ["Calling describing words nouns because they sit near nouns.", "Capitalising common nouns when they are not names or sentence starters.", "Forgetting that ideas and feelings can be nouns even though you cannot touch them."],
-    quiz: { question: "Which word is a noun in “The candle flickered during the story”?", options: ["candle", "flickered", "during", "the"], answer: "candle", explanation: "Candle names a thing, so it is a noun." },
-    prompt: "Ask the child to underline nouns, then sort them into people, places, things, animals, and ideas."
-  },
-  pronoun: {
-    example: cardExample("Amira found the shell, and she kept it.", "She points back to Amira, and it points back to the shell."),
-    nonExamples: title => [cardExample(`Amira found the shell is not using a ${title} for Amira.`, "The noun Amira is named directly rather than replaced by a pronoun."), cardExample(`The word this is not a ${title} in “this shell” if shell follows it.`, "Here this introduces a noun, so it is a determiner rather than a pronoun.")],
-    howToSpot: ["Find the noun or noun phrase the pronoun points to or replaces.", "Check whether the word stands in a noun position, such as subject or object.", "Make sure the reader can tell who or what the pronoun means."],
-    commonMistakes: ["Using a pronoun when the reader cannot tell who it refers to.", "Calling a determiner a pronoun when a noun follows it.", "Mixing up possessive pronouns such as mine with possessive determiners such as my."],
-    quiz: { question: "In “Ravi dropped his bag, but he found it,” what does it refer to?", options: ["his bag", "Ravi", "found", "but"], answer: "his bag", explanation: "It replaces the noun phrase his bag." },
-    prompt: "Ask the child to draw an arrow from each pronoun to the noun it points back to."
-  },
-  verb: {
-    example: cardExample("Maya has been reading by the window.", "Has been reading is the verb phrase; reading is the main action."),
-    nonExamples: title => [cardExample(`The word window is not a ${title} in “Maya read by the window.”`, "Window names a thing, so it is a noun."), cardExample(`The word quietly is not a ${title} in “Maya read quietly.”`, "Quietly tells how the reading happened, so it is an adverb.")],
-    howToSpot: ["Find the word or group that shows an action, state, being, or having.", "Change the time of the sentence and see which word changes form.", "Check whether helper verbs such as is, have, do, can, or must belong with the main verb."],
-    commonMistakes: ["Missing helper verbs in a verb phrase.", "Calling every word ending in -ing a verb without checking its job.", "Forgetting subject-verb agreement, such as she runs rather than she run."],
-    quiz: { question: "Which word is the main verb in “The dog has barked twice”?", options: ["barked", "dog", "has", "twice"], answer: "barked", explanation: "Barked carries the main action; has helps it." },
-    prompt: "Ask the child to find the whole verb phrase, then identify the main verb inside it."
-  },
-  adjective: {
-    example: cardExample("The bright moon shone above the quiet town.", "Bright describes moon, and quiet describes town."),
-    nonExamples: title => [cardExample(`The word brightly is not a ${title} in “The moon shone brightly.”`, "Brightly describes the verb shone, so it is an adverb."), cardExample(`The word moon is not a ${title} in “The bright moon shone.”`, "Moon names a thing, so it is a noun." )],
-    howToSpot: ["Ask which noun or pronoun the word describes or classifies.", "Try the question: what kind, which one, or how many?", "Check that it belongs inside or after a noun phrase rather than describing a verb."],
-    commonMistakes: ["Using an adjective where an adverb is needed, such as ran quick instead of ran quickly.", "Calling a noun used as a classifier an adjective without checking the teaching framework.", "Doubling comparisons, such as more taller."],
-    quiz: { question: "Which word is the adjective in “The noisy engine rattled”?", options: ["noisy", "engine", "rattled", "The"], answer: "noisy", explanation: "Noisy describes the noun engine." },
-    prompt: "Ask the child to connect each adjective to the noun it describes."
-  },
-  adverb: {
-    example: cardExample("The runner moved quickly around the track yesterday.", "Quickly tells how the runner moved, and yesterday tells when."),
-    nonExamples: title => [cardExample(`The word quick is not a ${title} in “The quick runner won.”`, "Quick describes the noun runner, so it is an adjective."), cardExample(`The word track is not a ${title} in “She ran around the track.”`, "Track names a place or thing, so it is a noun." )],
-    howToSpot: ["Ask whether the word tells how, when, where, how often, how much, or how certain.", "Check what it modifies: a verb, adjective, adverb, or whole clause.", "Do not rely only on -ly; some adverbs do not end in -ly, and some -ly words are adjectives."],
-    commonMistakes: ["Assuming every -ly word is an adverb.", "Confusing adjectives with adverbs when both describe details.", "Missing adverbs such as often, here, now, very, and probably."],
-    quiz: { question: "Which word is an adverb in “Sam whispered quietly”?", options: ["quietly", "Sam", "whispered", "the"], answer: "quietly", explanation: "Quietly tells how Sam whispered." },
-    prompt: "Ask the child to label whether the adverb answers how, when, where, how often, or how much."
-  },
-  determiner: {
-    example: cardExample("These three ducks crossed my path.", "These, three, and my introduce or identify nouns in noun phrases."),
-    nonExamples: title => [cardExample(`These is not a ${title} in “These are ripe.”`, "These stands alone for a noun phrase, so it is a pronoun here."), cardExample(`Mine is not a ${title} in “The red pencil is mine.”`, "Mine stands alone; my before a noun is the determiner form." )],
-    howToSpot: ["Look immediately before a noun or adjective plus noun.", "Ask whether it tells which one, whose one, how many, or how much.", "Check whether the word stands alone; if it does, it may be a pronoun instead."],
-    commonMistakes: ["Using two determiners that clash, such as the my bag.", "Confusing demonstrative determiners with demonstrative pronouns.", "Using much with countable plurals or many with uncountable nouns."],
-    quiz: { question: "Which word is the determiner in “Those apples are sweet”?", options: ["Those", "apples", "are", "sweet"], answer: "Those", explanation: "Those comes before apples and points to which apples." },
-    prompt: "Ask the child to use the noun-after-it test: if a noun follows, it may be a determiner."
-  },
-  preposition: {
-    example: cardExample("The keys are under the blue mat after lunch.", "Under begins a place phrase; after begins a time phrase."),
-    nonExamples: title => [cardExample(`The word outside is not a ${title} in “We went outside.”`, "Outside has no object here, so it works as an adverb."), cardExample(`The word mat is not a ${title} in “under the mat.”`, "Mat is the object of the preposition, not the preposition." )],
-    howToSpot: ["Look for a relationship word followed by a noun phrase.", "Ask what object completes the phrase, such as under what? or after what?", "Decide whether the phrase shows place, time, direction, or another relationship."],
-    commonMistakes: ["Calling the whole prepositional phrase the preposition.", "Forgetting that a preposition usually has an object.", "Confusing an adverb particle in a phrasal verb with an ordinary preposition."],
-    quiz: { question: "Which word is the preposition in “The fox ran across the field”?", options: ["across", "fox", "ran", "field"], answer: "across", explanation: "Across begins the phrase across the field." },
-    prompt: "Ask the child to find the preposition, then ask what noun phrase completes it."
-  },
-  conjunction: {
-    example: cardExample("I packed lunch because the trip was long, and Mina packed water.", "Because shows a reason; and joins another main idea."),
-    nonExamples: title => [cardExample(`The comma is not a ${title} in “I came, I saw.”`, "A comma is punctuation; it cannot join main clauses correctly by itself."), cardExample(`Because it rained is not a complete sentence on its own.`, "Because starts a subordinate clause that needs a main clause." )],
-    howToSpot: ["Look for a word or pair of words joining words, phrases, or clauses.", "Ask what relationship is shown: addition, choice, contrast, reason, time, or condition.", "Check whether the joined parts are equal or whether one depends on the other."],
-    commonMistakes: ["Using a comma alone to join two main clauses.", "Starting a subordinate clause and forgetting the main clause.", "Overusing and instead of choosing a conjunction that shows the exact relationship."],
-    quiz: { question: "Which word is the conjunction in “We stayed inside because it rained”?", options: ["because", "inside", "stayed", "rained"], answer: "because", explanation: "Because joins the reason to the main idea." },
-    prompt: "Ask the child to name the two ideas being joined and the relationship between them."
-  },
-  interjection: {
-    example: cardExample("Wow! The rainbow filled the sky.", "Wow shows a sudden feeling outside the main sentence grammar."),
-    nonExamples: title => [cardExample(`Rainbow is not an ${title} in “Wow! The rainbow is bright.”`, "Rainbow names a thing, so it is a noun."), cardExample(`Bright is not an ${title} in “The bright rainbow shone.”`, "Bright describes rainbow, so it is an adjective." )],
-    howToSpot: ["Look for a short word or phrase that shows a sudden reaction.", "Check whether it can stand apart from the main clause.", "Notice commas or exclamation marks that separate the reaction from the sentence."],
-    commonMistakes: ["Using too many exclamation marks after interjections.", "Treating every emotional sentence as an interjection.", "Using informal interjections in formal writing where they do not fit."],
-    quiz: { question: "Which word is the interjection in “Ouch! That nettle stung me”?", options: ["Ouch", "nettle", "stung", "me"], answer: "Ouch", explanation: "Ouch shows a sudden feeling or reaction." },
-    prompt: "Ask the child to read the sentence aloud and identify the reaction word."
-  },
-  wordFeature: {
-    example: cardExample("She walks today, but they walked yesterday.", "The verb forms and pronouns show person, number, and time choices."),
-    nonExamples: title => [cardExample(`Neat handwriting is not the same as ${title}.`, "A word feature is about grammar meaning or form, not presentation."), cardExample(`The topic sentence of a paragraph is not a ${title}.`, "A topic sentence organises a paragraph; a word feature belongs to words or word groups." )],
-    howToSpot: ["Look for a change in word form or pronoun choice.", "Ask what meaning is affected: one/more than one, time, person, gender, comparison, or voice.", "Check whether nearby words agree with the feature."],
-    commonMistakes: ["Confusing the feature number with number words used as determiners.", "Treating future time as only one simple verb ending in English.", "Calling every was sentence passive instead of checking the subject and verb form."],
-    quiz: { question: "Which pair shows a number change?", options: ["cat / cats", "blue / bluer", "run / ran", "he / she"], answer: "cat / cats", explanation: "Cat is singular and cats is plural." },
-    prompt: "Ask the child what changed in the word and what meaning changed with it."
-  },
-  phrase: {
-    example: cardExample("The tiny green frog jumped into the pond very quickly.", "The sentence contains noun, prepositional, and adverb phrases working inside one clause."),
-    nonExamples: title => [cardExample(`The frog jumped is not just a ${title}.`, "It has a subject and a verb, so it is a clause."), cardExample(`Jumped is not a ${title} by itself in this lesson.`, "One word can be part of a phrase, but a phrase is usually taught as a group of words working together." )],
-    howToSpot: ["Find a group of words working as one unit.", "Identify the head word, such as a noun, verb, adjective, adverb, or preposition.", "Check whether the group is smaller than a full clause or works inside a clause."],
-    commonMistakes: ["Calling a full clause a phrase.", "Missing words after the head that still belong to the phrase.", "Forgetting that different phrase types do different jobs."],
-    quiz: { question: "Which group is a prepositional phrase?", options: ["under the table", "the dog barked", "barked loudly", "because it rained"], answer: "under the table", explanation: "Under the table begins with a preposition and includes its object." },
-    prompt: "Ask the child to box the whole phrase and circle its head word."
-  },
-  clause: {
-    example: cardExample("Although it rained, we played football.", "Although it rained and we played football are clauses because each has a verb."),
-    nonExamples: title => [cardExample(`Under the wooden bridge is not a ${title}.`, "It is a phrase because it has no verb."), cardExample(`Very carefully is not a ${title}.`, "It describes how something happens but does not contain a subject and verb." )],
-    howToSpot: ["Find the verb or verb phrase first.", "Ask whether there is a subject, even if it is understood in a command.", "Decide whether the clause can stand alone or depends on another clause."],
-    commonMistakes: ["Calling a phrase a clause when it has no verb.", "Forgetting that subordinate clauses need a main clause.", "Mistaking a verb phrase by itself for a whole clause."],
-    quiz: { question: "Which group is a subordinate clause?", options: ["because it rained", "the red kite", "under the table", "very slowly"], answer: "because it rained", explanation: "It has a verb but depends on a main clause." },
-    prompt: "Ask the child to mark verbs first, then decide whether each clause can stand alone."
-  },
-  sentenceElement: {
-    example: cardExample("The brave mouse escaped through the crack.", "The brave mouse is the subject, and escaped through the crack is the predicate."),
-    nonExamples: title => [cardExample(`A full sentence type such as complex sentence is not a ${title}.`, "Sentence elements are jobs inside clauses, not names for whole sentence structures."), cardExample(`A comma is not a ${title}.`, "A comma is punctuation, not a clause element." )],
-    howToSpot: ["Find the verb first, because many sentence elements relate to it.", "Ask who or what the clause is about, then what is said about it.", "Use questions such as verb + what, verb + whom, or is/was + what to test objects and complements."],
-    commonMistakes: ["Calling everything after the verb an object.", "Confusing the subject with the first noun in a sentence.", "Missing complements after linking verbs such as is, seems, and became."],
-    quiz: { question: "In “The cat chased the string,” what is the object?", options: ["the string", "The cat", "chased", "The"], answer: "the string", explanation: "The string receives the action chased." },
-    prompt: "Ask the child to find the verb, then ask who or what is linked to that verb."
-  },
-  sentenceType: {
-    example: cardExample("Although it was late, we finished the model, and Sam packed it away.", "The sentence type depends on how many main and subordinate clauses it contains."),
-    nonExamples: title => [cardExample(`What a goal! is not identified by clause pattern first.`, "That label describes sentence purpose; sentence type is about clause structure."), cardExample(`A long sentence is not automatically a ${title}.`, "Sentence type depends on clauses, not length." )],
-    howToSpot: ["Find the finite verbs and clause boundaries.", "Count main clauses that could stand alone.", "Look for subordinate clauses introduced by words such as because, when, if, although, who, which, or that."],
-    commonMistakes: ["Naming sentence type by punctuation instead of clause structure.", "Counting phrases as clauses.", "Calling any long sentence complex or compound-complex."],
-    quiz: { question: "Which sentence is compound?", options: ["The rain stopped, and the sun appeared.", "Although it rained, we played.", "The bird sang.", "What a surprise!"], answer: "The rain stopped, and the sun appeared.", explanation: "It joins two main clauses with and." },
-    prompt: "Ask the child to label each clause M for main or S for subordinate before naming the type."
-  },
-  sentencePurpose: {
-    example: cardExample("Please close the gate before the dog runs out.", "The sentence gives a command or instruction."),
-    nonExamples: title => [cardExample(`A compound sentence is not a ${title}.`, "Compound describes clause structure, not the sentence's purpose."), cardExample(`A full stop alone does not prove a sentence is a ${title}.`, "Purpose depends on what the sentence is doing, not only punctuation." )],
-    howToSpot: ["Ask what the sentence is doing: telling, asking, ordering, or showing strong feeling.", "Look at word order and punctuation together.", "Decide how a reader should respond to the sentence."],
-    commonMistakes: ["Confusing sentence purpose with sentence type.", "Thinking every sentence with an exclamation mark is the same kind of exclamation.", "Missing polite commands that begin with please."],
-    quiz: { question: "Which sentence is a command?", options: ["Please close the gate.", "Where is the gate?", "The gate is closed.", "What a tall gate!"], answer: "Please close the gate.", explanation: "It tells someone what to do politely." },
-    prompt: "Ask the child what the writer wants the reader or listener to do after reading the sentence."
-  },
-  punctuation: {
-    example: cardExample("Yes, Mina, bring pens, glue, and card.", "The commas separate a reply, a name, and items in a list."),
-    nonExamples: title => [cardExample(`The word and is not ${title}.`, "And is a conjunction; punctuation uses marks, not joining words."), cardExample(`A capital letter is not the same as ${title}.`, "Capital letters are part of writing conventions, but punctuation marks organise sentences differently." )],
-    howToSpot: ["Look for marks that organise sentence meaning, pauses, questions, lists, speech, or possession.", "Ask what the mark helps the reader understand.", "Check whether removing or changing the mark changes the meaning."],
-    commonMistakes: ["Adding punctuation only where you pause instead of where grammar needs it.", "Using apostrophes for ordinary plurals.", "Joining two main clauses with just a comma."],
-    quiz: { question: "Which mark ends a direct question?", options: ["question mark", "comma", "apostrophe", "colon"], answer: "question mark", explanation: "A question mark shows that the sentence asks a direct question." },
-    prompt: "Ask the child to explain what job each punctuation mark is doing for the reader."
-  },
-  advanced: {
-    example: cardExample("The window was repaired after the storm, so the classroom stayed warm.", "The grammar choice affects emphasis, connection, and style."),
-    nonExamples: title => [cardExample(`A spelling correction is not the same as ${title}.`, "Spelling fixes letters; advanced grammar explains choices in structure, emphasis, and style."), cardExample(`A random long word does not prove ${title}.`, "Advanced grammar is about how language choices work, not just difficult vocabulary." )],
-    howToSpot: ["Ask what choice the writer made and why it helps the reader.", "Look for emphasis, links across sentences, speech reporting, formality, or voice.", "Compare the sentence with another version and notice how the effect changes."],
-    commonMistakes: ["Thinking advanced grammar always means longer sentences.", "Using formal language where a friendly style is needed.", "Changing voice or speech style without checking clarity."],
-    quiz: { question: "Which choice makes the doer less important?", options: ["The window was broken.", "The ball broke the window.", "Sam kicked the ball.", "The loud crash startled us."], answer: "The window was broken.", explanation: "The passive voice focuses on the window and leaves the doer unnamed." },
-    prompt: "Ask the child to compare two versions of the same sentence and explain which works better for the audience."
-  }
-};
-
-const PROFILE_BY_ALIAS = {
-  grammar: "overview", "words-parts-of-speech": "overview", "word-features": "overview", "sentence-elements": "overview", "sentence-types": "overview", "sentence-purposes": "overview", punctuation: "punctuation", "advanced-grammar": "advanced",
-  noun: "noun", "common-noun": "noun", "proper-noun": "noun", "abstract-noun": "noun", "concrete-noun": "noun", "collective-noun": "noun", "compound-noun": "noun", "countable-uncountable-noun": "noun", "head-noun": "noun",
-  pronoun: "pronoun", "personal-pronoun": "pronoun", "possessive-pronoun": "pronoun", "reflexive-pronoun": "pronoun", "relative-pronoun": "pronoun", "demonstrative-pronoun": "pronoun", "interrogative-pronoun": "pronoun", "indefinite-pronoun": "pronoun",
-  verb: "verb", "main-verb": "verb", "auxiliary-verb": "verb", "modal-verb": "verb", "transitive-verb": "verb", "intransitive-verb": "verb", "linking-verb": "verb", "phrasal-verb": "verb", "helping-verb": "verb",
-  adjective: "adjective", "descriptive-adjective": "adjective", "comparative-adjective": "adjective", "superlative-adjective": "adjective", "proper-adjective": "adjective", "participial-adjective": "adjective",
-  adverb: "adverb", "adverb-of-manner": "adverb", "adverb-of-time": "adverb", "adverb-of-place": "adverb", "adverb-of-frequency": "adverb", "adverb-of-degree": "adverb", "adverb-of-certainty": "adverb",
-  determiner: "determiner", article: "determiner", "definite-article": "determiner", "indefinite-article": "determiner", demonstrative: "determiner", "possessive-determiner": "determiner", quantifier: "determiner", "number-determiner": "determiner", "distributive-determiner": "determiner",
-  preposition: "preposition", "preposition-of-time": "preposition", "preposition-of-place": "preposition", "preposition-of-direction": "preposition",
-  conjunction: "conjunction", "coordinating-conjunction": "conjunction", "subordinating-conjunction": "conjunction", "correlative-conjunction": "conjunction",
-  interjection: "interjection", emotion: "interjection", surprise: "interjection", greeting: "interjection",
-  "singular-plural": "wordFeature", tense: "wordFeature", person: "wordFeature", gender: "wordFeature", "number-feature": "wordFeature", comparison: "wordFeature", voice: "wordFeature", "active-voice": "advanced", "passive-voice": "advanced",
-  phrase: "phrase", "noun-phrase": "phrase", "verb-phrase": "phrase", "adjective-phrase": "phrase", "adverb-phrase": "phrase", "prepositional-phrase": "phrase", "participial-phrase": "phrase",
-  clause: "clause", "main-clause": "clause", "subordinate-clause": "clause", "relative-clause": "clause", "adverbial-clause": "clause", "noun-clause": "clause", "conditional-clause": "clause",
-  subject: "sentenceElement", predicate: "sentenceElement", object: "sentenceElement", "direct-object": "sentenceElement", "indirect-object": "sentenceElement", complement: "sentenceElement", modifier: "sentenceElement",
-  "simple-sentence": "sentenceType", "compound-sentence": "sentenceType", "complex-sentence": "sentenceType", "compound-complex-sentence": "sentenceType", sentence: "sentenceType",
-  statement: "sentencePurpose", question: "sentencePurpose", command: "sentencePurpose", exclamation: "sentencePurpose",
-  "full-stop": "punctuation", comma: "punctuation", apostrophe: "punctuation", "question-mark": "punctuation", "exclamation-mark": "punctuation", colon: "punctuation", semicolon: "punctuation", dash: "punctuation", hyphen: "punctuation", brackets: "punctuation", "quotation-marks": "punctuation",
-  "direct-speech": "advanced", "indirect-speech": "advanced", conditionals: "advanced", cohesion: "advanced", formality: "advanced", register: "advanced"
-};
-
-const REVIEWED_CARD_OVERRIDES = {
+const CARD_OVERRIDES = {
   "gender": {
     simpleMeaning: "Gender is a grammar feature that can show whether a word refers to male, female, neutral, or unknown/unspecified.",
     formalMeaning: "In modern English, most nouns do not have grammatical gender. Gender is usually shown through meaning and pronoun choice, such as he, she, it, or they. This is different from languages such as French or Spanish, where many nouns have grammatical gender.",
     whyItMatters: "Understanding gender helps pupils choose suitable pronouns and avoid assuming that English nouns work like nouns in some other languages.",
-    examples: [cardExample("The girl said she was ready.", "She points back to the girl, a female person."), cardExample("The boy said he was ready.", "He points back to the boy, a male person."), cardExample("The robot moved because it was switched on.", "It is the usual pronoun for an ordinary object or machine."), cardExample("Alex forgot their book.", "Their can refer to someone unspecified or to a person who uses they/them pronouns.")],
-    nonExamples: [cardExample("The table is happy because she is clean.", "In normal English, table is not treated as female. We usually use it."), cardExample("The pencil rolled because he was dropped.", "In ordinary English, pencil is an object and usually takes it, unless a writer is deliberately personifying it.")],
-    howToSpot: ["Look for pronouns such as he, she, it, and they.", "Ask whether the noun refers to a male person, female person, thing, animal, or someone unspecified.", "Remember that most English objects use it."],
-    commonMistakes: ["Thinking every English noun has masculine or feminine gender.", "Using he or she for ordinary objects.", "Confusing natural gender with grammatical gender."],
-    miniQuiz: { question: "Which pronoun usually refers to the girl?", options: ["he", "she", "it", "them"], answer: "she", explanation: "She is commonly used for a female person." },
-    teacherPrompt: "Ask the child: Which noun does the pronoun point back to, and does the pronoun choice make sense?"
-  },
-  "tense": {
-    examples: [cardExample("Maya walked home yesterday.", "Walked uses a past-tense verb form."), cardExample("Maya is walking home now.", "Is walking uses a present form with progressive aspect to show an action in progress."), cardExample("Maya has walked home already.", "Has walked uses perfect aspect to connect a completed action to now.")],
-    nonExamples: [cardExample("Maya will walk home tomorrow.", "Will helps show future time, but English future time is not a single verb ending like walked."), cardExample("The walking path is muddy.", "Walking describes path here, so it is not showing tense as a main verb.")],
-    howToSpot: ["Look for present and past verb forms, such as walks and walked.", "Notice helper verbs that show ongoing or completed action, such as is walking or has walked.", "Use time words such as yesterday, now, and tomorrow as clues, but check the verb form too."],
-    commonMistakes: ["Saying English has a simple future verb ending like its past -ed ending.", "Confusing tense with every time word in a sentence.", "Missing helper verbs that are part of the verb phrase."],
-    miniQuiz: { question: "Which verb phrase shows past time?", options: ["walked home", "is walking", "will walk", "walks daily"], answer: "walked home", explanation: "Walked is the past-tense form." }
-  },
-  "voice": {
-    examples: [cardExample("The goalkeeper saved the shot.", "Active voice: the subject goalkeeper does the action."), cardExample("The shot was saved by the goalkeeper.", "Passive voice: the subject shot receives the action."), cardExample("The window was broken during the storm.", "Passive voice can omit the doer when it is unknown or less important.")],
-    nonExamples: [cardExample("The goalkeeper was tired.", "Was tired is not passive; tired describes the subject after a linking verb."), cardExample("The shot flew over the bar.", "The subject shot does the action, so this is active, not passive.")],
-    howToSpot: ["Ask whether the subject does the action or receives it.", "For passive voice, look for be or get plus a past participle, such as was saved.", "Check whether a by phrase names the doer, but remember it can be omitted."],
-    commonMistakes: ["Calling every sentence with was passive.", "Thinking passive voice is always wrong.", "Missing the doer when it appears after by."],
-    miniQuiz: { question: "Which sentence is passive?", options: ["The cake was eaten by Sam.", "Sam ate the cake.", "Sam was hungry.", "The cake tasted sweet."], answer: "The cake was eaten by Sam.", explanation: "The cake receives the action and was eaten is passive." }
-  },
-  "direct-object": {
-    examples: [cardExample("Aisha kicked the ball.", "The ball receives the action kicked."), cardExample("The chef chopped the onions.", "The onions are directly affected by chopped."), cardExample("Leo found it under the bed.", "It is a pronoun acting as the direct object of found.")],
-    nonExamples: [cardExample("Aisha slept peacefully.", "Slept has no direct object because nothing receives the action."), cardExample("The ball rolled downhill.", "The ball is the subject doing the rolling, not a direct object.")],
-    howToSpot: ["Find the action verb.", "Ask verb plus who? or verb plus what?", "Check that the answer is not the subject."],
-    commonMistakes: ["Choosing the subject as the direct object.", "Calling a prepositional phrase the direct object.", "Looking for a direct object after an intransitive verb that does not take one."],
-    miniQuiz: { question: "What is the direct object in The twins built a sandcastle?", options: ["The twins", "built", "a sandcastle", "twins built"], answer: "a sandcastle", explanation: "A sandcastle receives the action built." }
-  },
-  "cohesion": {
-    examples: [cardExample("Mina found a shell. She placed it in her pocket.", "She links back to Mina, and it links back to shell."), cardExample("First, we tested the bridge. Next, we added more weight.", "First and Next show the order of events."), cardExample("The dragon looked fierce. This creature guarded the cave.", "This creature links back to the dragon using a related noun phrase.")],
-    nonExamples: [cardExample("Mina found a shell. The bicycle was purple.", "The second sentence jumps to a new idea without a clear link."), cardExample("Sam dropped the glass. He picked him up.", "The pronoun him is confusing because it does not clearly refer to the glass.")],
-    howToSpot: ["Look for pronouns that point back to earlier nouns.", "Find linking words and adverbials such as however, next, because, later, and as a result.", "Check whether repeated or related words keep the topic clear."],
-    commonMistakes: ["Using pronouns when the reader cannot tell who or what they mean.", "Repeating the same noun too often instead of using clear links.", "Starting a new idea without signalling how it connects."],
-    miniQuiz: { question: "In Ravi built a kite. It flew above the field, what does It refer to?", options: ["Ravi", "a kite", "the field", "above"], answer: "a kite", explanation: "It links the second sentence back to a kite." }
+    examples: [
+      cardExample("The girl said she was ready.", "She points back to the girl, a female person."),
+      cardExample("The boy said he was ready.", "He points back to the boy, a male person."),
+      cardExample("The robot moved because it was switched on.", "It is the usual pronoun for an ordinary object or machine."),
+      cardExample("Alex forgot their book.", "Their can refer to someone unspecified or to a person who uses they/them pronouns.")
+    ],
+    nonExamples: [cardExample("The table is happy because she is clean.", "In normal English, “table” is not treated as female. We usually use “it”.")],
+    howToSpot: ["Look for pronouns such as he, she, it, and they.", "Ask whether the noun refers to a male person, female person, thing, animal, or someone unspecified.", "Remember that most English objects use “it”."],
+    commonMistakes: ["Thinking every English noun has masculine or feminine gender.", "Using “he” or “she” for ordinary objects.", "Confusing natural gender with grammatical gender."],
+    miniQuiz: { question: "Which pronoun usually refers to “the girl”?", options: ["he", "she", "it", "them"], answer: "she", explanation: "“She” is commonly used for a female person." },
+    teacherPrompt: "Ask the child: “Which noun does the pronoun point back to, and does the pronoun choice make sense?”"
   }
 };
 
-function getAliasForTopic(topic) { return TOPIC_ALIASES[topic.id] || slugify(topic.title); }
-function getProfileKey(alias) { return PROFILE_BY_ALIAS[alias] || "overview"; }
-function makeReviewedCard(topic) {
-  const alias = getAliasForTopic(topic);
-  const info = TERM_INFO[alias];
-  if (!info) return null;
-  const profile = CARD_PROFILE_LIBRARY[getProfileKey(alias)];
-  const title = topic.title.replace(/ \(.+\)/, "");
-  const override = REVIEWED_CARD_OVERRIDES[alias] || {};
-  const examples = override.examples || [cardExample(info[2], `${title} is the target feature in this example: ${info[0]}`), profile.example];
-  const formalMeaning = info[1].length < 40 ? `${info[1]} The label is decided by the word or group's job in a sentence.` : info[1];
-  const whyItMatters = info[3].length < 40 ? `${info[3]} It helps pupils make accurate choices in their own sentences.` : info[3];
-  return {
-    id: topic.id,
-    title: topic.title,
-    category: topic.category,
+function articleFor(text) { return /^[aeiou]/i.test(text) ? "an" : "a"; }
+function makeLearningCard(node) {
+  const alias = TOPIC_ALIASES[node.id] || slugify(node.title);
+  const info = TERM_INFO[alias] || TERM_INFO[slugify(node.title)] || TERM_INFO.grammar;
+  const readable = node.title.replace(/ \(.+\)/, "");
+  const base = {
+    id: node.id,
+    title: node.title,
+    category: node.category,
     simpleMeaning: info[0],
-    formalMeaning,
-    whyItMatters,
-    examples,
-    nonExamples: profile.nonExamples(title),
-    howToSpot: profile.howToSpot,
-    commonMistakes: profile.commonMistakes,
-    miniQuiz: profile.quiz,
-    teacherPrompt: profile.prompt,
-    ageLevel: topic.id.includes("advanced") || topic.id.includes("compound-complex") || topic.id.includes("passive") ? "advanced" : topic.id.split("-").length > 3 ? "middle" : "easy",
-    status: "complete",
-    contentSource: "reviewed-profile",
-    reviewedBy: "Grammar Accuracy Reviewer",
-    ...override
+    formalMeaning: info[1],
+    whyItMatters: info[3],
+    examples: [cardExample(info[2], `Archived v2.0.0 card. Open the current version for the reviewed ${readable.toLowerCase()} lesson.`)],
+    nonExamples: [cardExample("Archived v2.0.0 card. Current reviewed content is in the main app.", `A word should only be called ${articleFor(readable)} ${readable.toLowerCase()} when it matches the definition above.`)],
+    howToSpot: [`Use the current version for reviewed ${readable.toLowerCase()} spotting guidance.`, "Archived v2.0.0 guidance was superseded by reviewed v2.0.1 content.", "Open the current version for reviewed classroom prompts."],
+    commonMistakes: [`Archived v2.0.0 wording was superseded by reviewed ${readable.toLowerCase()} guidance.`, "Use the current app for reviewed misconception notes.", "Use the current app for reviewed definitions and examples."],
+    miniQuiz: { question: `Archived ${readable} quiz. Use the current app for the reviewed quiz.`, options: [readable, "Archived distractor A", "Archived distractor B", "Archived distractor C"], answer: readable, explanation: `${readable} is the grammar feature explained on this card.` },
+    teacherPrompt: `Ask the child: “What evidence in the sentence proves this is ${readable.toLowerCase()}?”`,
+    ageLevel: node.id.includes("advanced") || node.id.includes("compound-complex") || node.id.includes("passive") ? "advanced" : node.id.split("-").length > 3 ? "middle" : "easy",
+    status: "complete"
   };
+  return { ...base, ...(CARD_OVERRIDES[alias] || {}) };
 }
 
-const APPROVED_EXTRA_CARD_TOPICS = [{ id: "sentence", title: "Sentence", category: "sentence-types" }];
-const REVIEWED_LEARNING_CARDS = [...flattenTopics(), ...APPROVED_EXTRA_CARD_TOPICS].map(makeReviewedCard).filter(Boolean);
-const LEARNING_CARD_BY_ID = Object.fromEntries(REVIEWED_LEARNING_CARDS.map(card => [card.id, card]));
-const LEARNING_CARDS = REVIEWED_LEARNING_CARDS;
-function getLearningCard(id) {
-  const card = LEARNING_CARD_BY_ID[id] || null;
-  return card && card.status === "complete" ? card : null;
-}
+const LEARNING_CARDS = [...flattenTopics().map(makeLearningCard), makeLearningCard({ id: "sentence", title: "Sentence", category: "sentence-types" })];
+const LEARNING_CARD_BY_ID = Object.fromEntries(LEARNING_CARDS.map(card => [card.id, card]));
+function getLearningCard(id) { return LEARNING_CARD_BY_ID[id] || null; }
 function getTopicIdForTitle(title) {
   const found = flattenTopics().find(node => node.title === title);
   return found ? found.id : slugify(title);
 }
 
-const REQUIRED_CARD_FIELDS = ["id", "title", "category", "simpleMeaning", "formalMeaning", "whyItMatters", "examples", "nonExamples", "howToSpot", "commonMistakes", "miniQuiz", "teacherPrompt", "ageLevel", "status"];
-const LOW_QUALITY_PATTERN_SOURCES = [
-  ["This sentence", "shows .* in context"].join(" "),
-  ["The label does not fit", "if the word or group is doing a different job"].join(" "),
-  ["Find .* by checking", "its job in the sentence"].join(" "),
-  ["Use the example sentence", "to prove the label"].join(" "),
-  ["Ask what the word", "or group is doing for the reader"].join(" "),
-  ["Do not label every", "similar-looking word"].join(" "),
-  ["Do not ignore", "nearby words"].join(" "),
-  ["Do not confuse", "the example with the definition"].join(" "),
-  ["Which option", "best matches"].join(" ")
-];
-const LOW_QUALITY_PATTERNS = LOW_QUALITY_PATTERN_SOURCES.map(source => new RegExp(source, "i"));
-
 function validateLearningCards() {
-  const topics = [...flattenTopics(), ...APPROVED_EXTRA_CARD_TOPICS];
-  const topicIds = new Set(topics.map(topic => topic.id));
-  const idCounts = LEARNING_CARDS.reduce((counts, card) => ({ ...counts, [card.id]: (counts[card.id] || 0) + 1 }), {});
-  const duplicateIds = Object.entries(idCounts).filter(([, count]) => count > 1).map(([id]) => id);
+  const topics = flattenTopics();
   const missingCards = topics.filter(topic => !LEARNING_CARD_BY_ID[topic.id]).map(topic => ({ id: topic.id, title: topic.title }));
-  const orphanCards = LEARNING_CARDS.filter(card => !topicIds.has(card.id)).map(card => ({ id: card.id, title: card.title }));
   const cardIssues = LEARNING_CARDS.map(card => {
-    const text = JSON.stringify(card);
-    const lowerText = text.toLowerCase();
+    const text = JSON.stringify(card).toLowerCase();
     const issues = [];
-    REQUIRED_CARD_FIELDS.forEach(field => { if (!(field in card)) issues.push(`${field} missing`); });
     if (!card.simpleMeaning || card.simpleMeaning.length < 30) issues.push("simpleMeaning missing or too short");
-    if (!card.formalMeaning || card.formalMeaning.length < 40) issues.push("formalMeaning missing or too short");
-    if (!card.whyItMatters || card.whyItMatters.length < 40) issues.push("whyItMatters missing or too short");
-    if (!Array.isArray(card.examples) || card.examples.length < 2) issues.push("at least two examples required");
-    if (!Array.isArray(card.nonExamples) || card.nonExamples.length < 2) issues.push("at least two non-examples required");
-    if (!Array.isArray(card.howToSpot) || card.howToSpot.length < 3) issues.push("at least three howToSpot rules required");
-    if (!Array.isArray(card.commonMistakes) || card.commonMistakes.length < 2) issues.push("at least two commonMistakes required");
-    [...(card.examples || []), ...(card.nonExamples || [])].forEach((item, index) => {
-      if (!item.sentence || !item.explanation) issues.push(`example/non-example ${index + 1} missing sentence or explanation`);
-    });
-    if (!card.miniQuiz || !card.miniQuiz.question || !Array.isArray(card.miniQuiz.options) || card.miniQuiz.options.length < 4 || !card.miniQuiz.options.includes(card.miniQuiz.answer) || !card.miniQuiz.explanation) issues.push("miniQuiz incomplete or answer not in options");
-    if (card.miniQuiz && card.miniQuiz.answer === card.title) issues.push("miniQuiz answer repeats card title");
-    if (card.miniQuiz && ["Paragraph", "Handwriting", "Spelling list"].every(option => card.miniQuiz.options && card.miniQuiz.options.includes(option))) issues.push("miniQuiz uses unrelated factory distractors");
-    const banned = BANNED_PLACEHOLDER_PHRASES.filter(phrase => lowerText.includes(phrase.toLowerCase()));
+    if (card.title !== "GRAMMAR" && card.simpleMeaning === TERM_INFO.grammar[0]) issues.push("simpleMeaning too generic");
+    if (!card.formalMeaning) issues.push("formalMeaning missing");
+    if (!card.examples || !card.examples.length) issues.push("examples missing");
+    if (!card.howToSpot || !card.howToSpot.length) issues.push("howToSpot missing");
+    if (!card.commonMistakes || !card.commonMistakes.length) issues.push("commonMistakes missing");
+    if (!card.miniQuiz || !card.miniQuiz.question || !card.miniQuiz.options || !card.miniQuiz.answer || !card.miniQuiz.explanation) issues.push("miniQuiz missing");
+    const banned = BANNED_PLACEHOLDER_PHRASES.filter(phrase => text.includes(phrase.toLowerCase()));
     if (banned.length) issues.push(`banned placeholder phrase: ${banned.join(", ")}`);
-    const generic = LOW_QUALITY_PATTERNS.filter(pattern => pattern.test(text)).map(pattern => pattern.source);
-    if (generic.length) issues.push(`low-quality template text: ${generic.join(", ")}`);
     if (card.status !== "complete") issues.push("status needs review");
-    if (card.contentSource !== "reviewed-profile" || card.reviewedBy !== "Grammar Accuracy Reviewer") issues.push("card lacks reviewed content metadata");
     return { id: card.id, title: card.title, issues };
   }).filter(item => item.issues.length);
   return {
-    totalTopics: topics.length,
     totalCards: LEARNING_CARDS.length,
     completeCards: LEARNING_CARDS.filter(card => card.status === "complete" && !cardIssues.some(issue => issue.id === card.id)).length,
     cardsNeedingReview: cardIssues,
     missingCards,
-    orphanCards,
-    duplicateIds,
-    bannedPlaceholderCards: cardIssues.filter(item => item.issues.some(issue => issue.includes("banned placeholder phrase"))),
-    lowQualityCards: cardIssues.filter(item => item.issues.some(issue => issue.includes("low-quality template text")))
+    bannedPlaceholderCards: cardIssues.filter(item => item.issues.some(issue => issue.includes("banned placeholder phrase")))
   };
 }
 
 const CONTENT_QUALITY_REPORT = validateLearningCards();
-function getLearningCardStatus(id) {
-  if (!LEARNING_CARD_BY_ID[id]) return "missing";
-  if (CONTENT_QUALITY_REPORT.cardsNeedingReview.some(card => card.id === id)) return "needs-review";
-  return "complete";
-}
 
 const LEARNING_LEVELS = [
   ["Words", "Words are the smallest meaning bricks in grammar.", [
@@ -679,7 +435,7 @@ const LEARNING_LEVELS = [
 const ANALYSER_SENTENCES = [
   { text: "Those bright stars twinkled above the camp.", summary: "Simple sentence: noun phrase + verb phrase + prepositional phrase.", words: [["Those", "determiner", "points to which stars we mean.", "It introduces the noun stars as a demonstrative determiner.", "It sits directly before adjectives and the noun."], ["bright", "adjective", "describes the noun stars.", "It adds a quality inside the noun phrase.", "Ask: what kind of stars?"], ["stars", "noun", "names things in the sky.", "It is the head noun and subject of the sentence.", "The verb twinkled agrees with stars."], ["twinkled", "verb", "shows what the stars did.", "It is the main verb in the predicate.", "A clause needs a verb."], ["above", "preposition", "begins a prepositional phrase.", "It shows the place relationship between stars and camp.", "It is followed by the noun phrase the camp."], ["the", "determiner", "introduces camp.", "It marks camp as a specific place.", "It comes before the noun."], ["camp", "noun", "names a place.", "It is the object of the preposition above.", "Ask: above what?"]], phrases: [{ label: "Noun phrase / subject", text: "Those bright stars", highlights: ["Those", "bright", "stars"], job: "Tells who or what the sentence is about." }, { label: "Verb phrase / predicate", text: "twinkled above the camp", highlights: ["twinkled"], job: "Says what the subject did and adds where." }, { label: "Prepositional phrase", text: "above the camp", highlights: ["above"], job: "Adds place detail to the verb." }] },
   { text: "Amira carefully placed the vase on the shelf.", summary: "Simple sentence with subject, adverb, verb, direct object, and place phrase.", words: [["Amira", "noun", "names a person.", "It is a proper noun and the subject.", "It starts with a capital letter because it is a name."], ["carefully", "adverb", "tells how Amira placed the vase.", "It modifies the verb placed.", "Ask: placed how?"], ["placed", "verb", "shows the action.", "It is a transitive verb with a direct object.", "Ask what action happens."], ["the", "determiner", "introduces vase.", "It marks vase as a specific thing.", "It comes before the noun."], ["vase", "noun", "names a thing.", "It is the direct object receiving the action.", "Ask: placed what?"], ["on", "preposition", "begins a place phrase.", "It links the vase to the shelf.", "It is followed by a noun phrase."], ["the", "determiner", "introduces shelf.", "It marks shelf as specific.", "It comes before the noun."], ["shelf", "noun", "names a thing/place.", "It is the object of the preposition on.", "Ask: on what?"]], phrases: [{ label: "Subject", text: "Amira", highlights: ["Amira"], job: "Who performs the action." }, { label: "Verb phrase", text: "carefully placed", highlights: ["carefully", "placed"], job: "Action plus how it happened." }, { label: "Direct object", text: "the vase", highlights: ["vase"], job: "Thing receiving the action." }, { label: "Prepositional phrase", text: "on the shelf", highlights: ["on"], job: "Where the vase was placed." }] },
-  { text: "When the bell rang, the children lined up quietly.", summary: "Complex sentence: subordinate time clause + main clause.", words: [["When", "conjunction", "starts a subordinate time clause.", "It tells the reader the time relationship.", "The clause cannot stand alone as a complete sentence."], ["the", "determiner", "introduces bell.", "It marks bell as specific.", "It comes before the noun."], ["bell", "noun", "names a thing.", "It is the subject of the subordinate clause.", "Ask: what rang?"], ["rang", "verb", "shows the bell's action.", "It is the verb in the subordinate clause.", "A clause needs a verb."], ["the", "determiner", "introduces children.", "It marks children as a known group.", "It comes before the noun."], ["children", "noun", "names people.", "It is the subject of the main clause.", "Ask: who lined up?"], ["lined", "verb", "shows the action in lined up.", "It is part of a phrasal verb.", "The word up belongs with it."], ["up", "particle", "completes the phrasal verb lined up.", "It helps make the action mean formed a line.", "Try removing it: the meaning changes."], ["quietly", "adverb", "tells how the children lined up.", "It modifies lined up.", "Ask: lined up how?"]], phrases: [{ label: "Subordinate clause", text: "When the bell rang", highlights: ["When", "rang"], job: "Adds time and depends on the main clause." }, { label: "Main clause", text: "the children lined up quietly", highlights: ["children", "lined up", "quietly"], job: "Can stand alone as a complete idea." }] },
+  { text: "When the bell rang, the children lined up quietly.", summary: "Complex sentence: subordinate time clause + main clause.", words: [["When", "conjunction", "starts a subordinate time clause.", "It tells the reader the time relationship.", "The clause cannot stand alone as a complete sentence."], ["the", "determiner", "introduces bell.", "It marks bell as specific.", "It comes before the noun."], ["bell", "noun", "names a thing.", "It is the subject of the subordinate clause.", "Ask: what rang?"], ["rang", "verb", "shows the bell's action.", "It is the verb in the subordinate clause.", "A clause needs a verb."], ["the", "determiner", "introduces children.", "It marks children as a known group.", "It comes before the noun."], ["children", "noun", "names people.", "It is the subject of the main clause.", "Ask: who lined up?"], ["lined", "verb", "shows the action in lined up.", "It is part of a phrasal verb.", "The word up belongs with it."], ["up", "adverb", "completes the phrasal verb lined up.", "It helps make the action mean formed a line.", "Try removing it: the meaning changes."], ["quietly", "adverb", "tells how the children lined up.", "It modifies lined up.", "Ask: lined up how?"]], phrases: [{ label: "Subordinate clause", text: "When the bell rang", highlights: ["When", "rang"], job: "Adds time and depends on the main clause." }, { label: "Main clause", text: "the children lined up quietly", highlights: ["children", "lined up", "quietly"], job: "Can stand alone as a complete idea." }] },
   { text: "This is the picture that won the prize.", summary: "Complex sentence with a demonstrative pronoun and a relative clause.", words: [["This", "pronoun", "stands alone for this picture or thing.", "It is a demonstrative pronoun because no noun follows it.", "Replace it with a noun phrase: This picture is..."], ["is", "verb", "links the subject to the complement.", "It is a linking verb.", "It does not show an action here."], ["the", "determiner", "introduces picture.", "It marks picture as specific.", "It comes before the noun."], ["picture", "noun", "names a thing.", "It is part of the subject complement after is.", "Ask: This is what?"], ["that", "pronoun", "introduces a relative clause about picture.", "It refers back to picture.", "It comes before the verb won."], ["won", "verb", "shows the action in the relative clause.", "It tells what the picture did.", "A relative clause still has a verb."], ["the", "determiner", "introduces prize.", "It marks prize as specific.", "It comes before the noun."], ["prize", "noun", "names a thing.", "It is the direct object of won.", "Ask: won what?"]], phrases: [{ label: "Demonstrative pronoun", text: "This", highlights: ["This"], job: "Points to a whole thing without naming it." }, { label: "Complement noun phrase", text: "the picture", highlights: ["picture"], job: "Completes the meaning of is." }, { label: "Relative clause", text: "that won the prize", highlights: ["that", "won"], job: "Adds information about picture." }] }
 ];
 

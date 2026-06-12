@@ -49,6 +49,16 @@ http://localhost:8000
 
 You can also open `index.html` directly in a browser, although the version history preview uses `fetch()` and works best through a local server or GitHub Pages.
 
+## Content validation
+
+Run the reviewed-card validator before release:
+
+```bash
+node tools/validate-content.js
+```
+
+The validator fails if Grammar Map topics are missing reviewed cards, cards contain low-quality template text, quiz distractors are unrelated, or glossary entries miss required teaching fields.
+
 ## Deploy to GitHub Pages
 
 1. Push the repository to GitHub.
@@ -60,7 +70,7 @@ You can also open `index.html` directly in a browser, although the version histo
 
 ## Version history
 
-The current app version is **v2.0.0**. See [`VERSION_HISTORY.md`](VERSION_HISTORY.md) for the global history shared by current and archived app versions.
+The current app version is **v2.0.1**. See [`VERSION_HISTORY.md`](VERSION_HISTORY.md) for the global history shared by current and archived app versions.
 
 When releasing a new version:
 
@@ -68,7 +78,7 @@ When releasing a new version:
 2. Move or copy the previous release into `archive/<version>/`.
 3. Update `APP_VERSION` and `VERSION_REGISTRY` in `grammar-data.js`.
 4. Archive the previous release under `archive/<version>/` and keep archived links pointing to the shared history.
-5. Validate every Grammar Map topic has a strict-schema learning card; missing cards should show a warning, not fallback teaching copy.
+5. Validate every Grammar Map topic has a reviewed strict-schema learning card; missing or unreviewed cards should show a warning, not fallback teaching copy.
 6. Update visible examples so each one is a complete example sentence with the key grammar word(s) highlighted where relevant.
 7. Update `VERSION_HISTORY.md` with release notes and archive notes.
 8. Commit and push the release.

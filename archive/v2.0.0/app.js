@@ -77,16 +77,10 @@ function renderPrinciples() {
   $("#principles").innerHTML = TEACHING_PRINCIPLE.map(line => `<span>${line}</span>`).join("");
 }
 
-function cardStatusBadge(topicId) {
-  const status = getLearningCardStatus(topicId);
-  const label = status === "complete" ? "✅" : status === "needs-review" ? "⚠️" : "❌";
-  return `<span class="card-status ${status}" title="Learning card status: ${status}">${label}</span>`;
-}
 function renderTreeNode(node) {
   const hasChildren = node.children && node.children.length;
-  const label = `${cardStatusBadge(node.id)} ${escapeHtml(node.title)}`;
-  if (!hasChildren) return `<li><button class="leaf" data-topic-id="${escapeHtml(node.id)}">${label}</button></li>`;
-  return `<li><details ${node.title === "GRAMMAR" ? "open" : ""}><summary data-topic-id="${escapeHtml(node.id)}">${label}</summary><ul>${node.children.map(renderTreeNode).join("")}</ul></details></li>`;
+  if (!hasChildren) return `<li><button class="leaf" data-topic-id="${escapeHtml(node.id)}">${escapeHtml(node.title)}</button></li>`;
+  return `<li><details ${node.title === "GRAMMAR" ? "open" : ""}><summary data-topic-id="${escapeHtml(node.id)}">${escapeHtml(node.title)}</summary><ul>${node.children.map(renderTreeNode).join("")}</ul></details></li>`;
 }
 function renderGrammarMap() {
   $("#treeRoot").innerHTML = `<ul>${renderTreeNode(GRAMMAR_TREE)}</ul>`;
@@ -97,9 +91,7 @@ function renderGrammarMap() {
   showLearningCard(getTopicIdForTitle("Nouns"));
 }
 function renderLearningCardWarning(topicId) {
-  const status = getLearningCardStatus(topicId);
-  const heading = status === "needs-review" ? "Learning card awaiting review." : "Learning card needed for this topic.";
-  $("#learningCard").innerHTML = `<h2>${heading}</h2><p class="missing-card">Topic id: <code>${escapeHtml(topicId)}</code></p><p>No fallback lesson has been shown, because missing or unreviewed grammar content should be fixed in <code>grammar-data.js</code>.</p>`;
+  $("#learningCard").innerHTML = `<h2>Learning card needed for this topic.</h2><p class="missing-card">Topic id: <code>${escapeHtml(topicId)}</code></p><p>No fallback lesson has been shown, because missing grammar content should be fixed in <code>grammar-data.js</code>.</p>`;
 }
 function renderExampleList(items) {
   return `<ul>${items.map(item => `<li><strong>${escapeHtml(item.sentence)}</strong><br><span>${escapeHtml(item.explanation)}</span></li>`).join("")}</ul>`;
@@ -107,7 +99,7 @@ function renderExampleList(items) {
 function renderTextList(items) { return `<ul>${items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`; }
 function showLearningCard(topicId) {
   const card = getLearningCard(topicId);
-  if (!card || getLearningCardStatus(topicId) !== "complete") { renderLearningCardWarning(topicId); return; }
+  if (!card) { renderLearningCardWarning(topicId); return; }
   const quizName = `topic-${card.id}`;
   $("#learningCard").innerHTML = `<h2>${escapeHtml(card.title)}</h2><p class="topic-id"><strong>Topic id:</strong> <code>${escapeHtml(card.id)}</code> · <strong>Status:</strong> ${escapeHtml(card.status)}</p>
     <section><h3>Simple meaning</h3><p>${escapeHtml(card.simpleMeaning)}</p></section>
@@ -210,7 +202,7 @@ function renderContentQualityReport() {
   const problemList = (items, label) => items.length ? `<details><summary>${label}: ${items.length}</summary><ul>${items.slice(0, 20).map(item => `<li><code>${escapeHtml(item.id)}</code> ${escapeHtml(item.title || "")} ${item.issues ? `— ${escapeHtml(item.issues.join("; "))}` : ""}</li>`).join("")}</ul></details>` : `<p>${label}: 0</p>`;
   const el = $("#contentQualityReport");
   if (!el) return;
-  el.innerHTML = `<h3>Content quality report</h3><p><strong>Total grammar-map topics:</strong> ${report.totalTopics}</p><p><strong>Total cards:</strong> ${report.totalCards}</p><p><strong>Complete cards:</strong> ${report.completeCards}</p>${problemList(report.cardsNeedingReview, "Cards needing review")}${problemList(report.missingCards, "Missing cards")}${problemList(report.orphanCards || [], "Cards not mapped to topics")}${problemList((report.duplicateIds || []).map(id => ({ id })), "Duplicate card ids")}${problemList(report.bannedPlaceholderCards, "Cards with banned placeholder phrases")}${problemList(report.lowQualityCards || [], "Cards with low-quality template text")}`;
+  el.innerHTML = `<h3>Content quality report</h3><p><strong>Total cards:</strong> ${report.totalCards}</p><p><strong>Complete cards:</strong> ${report.completeCards}</p>${problemList(report.cardsNeedingReview, "Cards needing review")}${problemList(report.missingCards, "Missing cards")}${problemList(report.bannedPlaceholderCards, "Cards with banned placeholder phrases")}`;
 }
 
 function renderProgress() {

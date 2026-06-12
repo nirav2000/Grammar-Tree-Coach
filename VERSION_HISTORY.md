@@ -2,7 +2,21 @@
 
 This is the global version history for Grammar Tree Coach. Current and archived static app versions link back to this single file so releases share one source of truth.
 
-## v2.0.0 — 2026-06-12 — Current
+## v2.0.1 — 2026-06-12 — Current
+
+Semantic version: `MAJOR.MINOR.PATCH`
+
+### Changed
+- Replaced runtime generic learning-card generation with reviewed profile-based learning cards for every Grammar Map topic.
+- Strengthened validation so low-quality factory phrases, unrelated quiz distractors, duplicate ids, orphan cards, missing cards, and incomplete examples are reported.
+- Added `tools/validate-content.js` so reviewed-card checks can run before release.
+- Added Grammar Map card-status badges and expanded the Parent/Teacher content quality report.
+- Updated the analyser wording for phrasal-verb particles to avoid overgeneralising them as ordinary adverbs.
+
+### Archived previous version
+- `archive/v2.0.0/` preserves the strict-schema baseline before the reviewed-card content-quality patch.
+
+## v2.0.0 — 2026-06-12 — Archived
 
 Semantic version: `MAJOR.MINOR.PATCH`
 
@@ -16,7 +30,7 @@ Semantic version: `MAJOR.MINOR.PATCH`
 - Replaced generic fallback learning-card content with explicit missing-card warnings when a card is absent.
 - Replaced the Gender card with a modern-English explanation of natural gender, pronoun choice, and the difference from grammatical gender in other languages.
 - Improved glossary schema and glossary entries so each entry uses childMeaning, formalMeaning, example, and commonMistake.
-- Version selector now marks v2.0.0 as current, keeps v1.1.0 as an archived release, and moves classroom packs to planned v2.1.0.
+- Version selector marked v2.0.0 as current, kept v1.1.0 as an archived release, and moved classroom packs to planned v2.1.0.
 
 ### Removed
 - Removed poor fallback wording such as generic grammar-tree placeholder text from current and archived data files.
